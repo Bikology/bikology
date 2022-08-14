@@ -1,0 +1,2124 @@
+
+		<nav class="navbar navbar-default navbar-fixed-top">
+  			<div class="container-fluid">
+  				<div class="navbar-header">
+				<a class="navbar-brand" href="https://www.bikologi.com">
+					<img alt="Brand" src="/images/logo.png" style="height:20px;">
+				</a>
+				</div>
+	  			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Product API <span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#api-key">API Key</a></li>
+								<li><a href="#fetch-api">Fetch API</a></li>
+								<li><a href="#api-endpoints">API End Points</a></li>
+								<li><a href="#components">Components</a></li>
+								<li><a href="#bikes">Bikes</a></li>
+								<li><a href="#brands">Brand</a></li>
+								<li><a href="#compatibility">Compatibility</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Image Generator<span class="caret"></span></a>
+							<ul class="dropdown-menu">
+								<li><a href="#mtb-bikes">Trail / DH Bikes</a></li>
+								<li><a href="#mtb-parameters">MTB Parameters</a></li>
+								<li><a href="#mtb-testing">MTB Query String Generator</a></li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+  			</div><!-- /.container-fluid -->
+		</nav>
+		<div class="container">
+			<div class="jumbotron">
+				<h1>Bikologi Aurora</h1>
+				<p class="lead">The Bikologi Framework and API Documentation.</p>
+			</div>
+		</div>
+		<div id="api" class="container">
+			<h2>API</h2>
+			<p class="lead">The Bikologi API is your gateway to accessing component, bike, and other data relevant to your application. We provide two ways to access the API. 1. Methods used to access data are based on the <a target="_blank" href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">Fetch API</a>, with polyfills for older browsers. 2. The endpoints for server side and other integrations.</p>
+			<h3 id="api-key">API Key</h3>
+			<p>In order to access the API, you will need an API key. If you haven't received a key and are expecting one, please contact an administrator. Your key is sent over in the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Authorization" target="_blank">authorization header</a>. If you're using our API, pass your key as the last parameter in the function.</p>
+			<code>{Authorization : abc123}</code>
+			<h3 id="fetch-api">Fetch API</h3>
+			<p>We believe the Fetch API is going to be the best native way to integrate with APIs from the browser. Each one of our methods to access components or products is built off the Fetch API(you can always use whatever HTTP client you'd like, query strings are the same) and has been tested back to IE10.</p>
+			<p>To include the Bikologi framework on your site, include<code>&lt;script src="http://docs.bikologi.com/bikologi-aurora.min.js"&gt;&lt;/script&gt;</code> in the head section of your page.</p>
+			<pre>
+//example request
+var Bikologi = window.Bikologi,
+	query = { 
+		component: 'fork', //we want forks
+		maxForkTravel: 170, //that are 170mm or less travel
+		minForkTravel: 150, //that are 150mm or greater travel
+		rearAxleSize: '12 x 148', //that will fit a 12 x 148 bike, returning boost forks
+		wheelSize: '27.5' //that fit 27.5" bikes
+	},
+	apiKey = 'abc123';
+
+Bikologi.componentAPI(query, apiKey)
+	.then(function(resp){ 
+		console.log(resp)
+	}).catch(function(err) {
+		console.log(err);
+	});
+			</pre>
+			<pre>
+// example response
+[{
+	"_id": "5677a85fba0c720c002a0cb0",
+	"component": "fork",
+	"category": "suspension",
+	"year": 2016,
+	"manufacturer": "Rock Shox",
+	"model": "Pike RCT3",
+	"wheelSize": "27.5",
+	"steererTube": "1.125 x 1.5",
+	"images": {
+		"ad": [],
+		"builder": [{
+			"use": "builder",
+			"render": "desktop",
+			"url": "http://content.bikologi.com/component/2016/rock-shox/fork/pike-rct3-fork-steerer-desktop.png",
+			"position": "steerer",
+			"color": "fork"
+		},{
+			"use": "builder",
+			"render": "desktop",
+			"url": "http://content.bikologi.com/component/2016/rock-shox/fork/pike-rct3-white-desktop.png",
+			"color": "white"
+		},{
+			"use": "builder",
+			"render": "desktop",
+			"url": "http://content.bikologi.com/component/2016/rock-shox/fork/pike-rct3-black-brake-mount-desktop.png",
+			"position": "brake-mount",
+			"color": "black"
+		}],
+		"vanity": [{
+			"use": "vanity",
+			"render": "desktop",
+			"url": "http://content.bikologi.com/component/2016/rock-shox/fork/pike-rct3-black-desktop.jpg",
+			"color": "black"
+  		},{
+			"use": "vanity",
+			"render": "desktop",
+			"url": "http://content.bikologi.com/component/2016/rock-shox/fork/pike-rct3-white-desktop.jpg",
+			"color": "white"
+		}]
+	},
+	"__v": 0,
+	"weight": 1861,
+	"msrp": 1050,
+	"enabled": true,
+	"pricing": { // affiliate pricing info to be removed },
+	"description": "//affiliate description to be removed",
+	"hubBody": [],
+	"rearAxleSize": [],
+	"frontAxleSize": [
+		"15 x 100",
+		"15 x 110"
+	],
+	"seatpostDiameter": [],
+	"crankArmLength": [],
+	"speeds": [],
+	"shockSize": [],
+	"travel": [
+		"120",
+		"130",
+		"140",
+		"150",
+		"160"
+	],
+	"usage": [
+		"trail",
+		"enduro"
+    ]
+}]
+			</pre>
+			<h3 id="api-endpoints">API End Points</h3>
+			<p>We utilize Heroku for our hosting, and are currently using their SSL for HTTPS. The component API can be accessed here:</p>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET*</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component</code>
+					</td>
+					<td>
+						Returns products in array
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>POST</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component</code>
+					</td>
+					<td>
+						Adds product to approval queue.
+					</td>
+				</tr>
+			</table>
+			<p>*Note that we don't recommend this actual <code>GET</code> request, as the payload can be > 2mb.</p>
+			<h3 id="components">Components</h3>
+			<pre>
+var query = { 
+	manufacturer : 'sram',
+	model : 'eagle',
+	year : 2017
+};
+
+Bikologi.componentAPI(query, apiKey)
+	.then(function(resp){ 
+		console.log(resp)
+	}).catch(function(err) {
+		console.log(err);
+	});
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component</code>
+					</td>
+					<td>
+						Returns components in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>manufacturer</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						see brands api
+					</td>
+					<td>
+						optional. gets components by brand. note, uses regex
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>year</code>
+					</td>
+					<td>
+						integer
+					</td>
+					<td>
+						2015, 2016, 2017, 2018
+					</td>
+					<td>
+						optional, manufacturer / model are required to work. gets components from a year
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>model</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						'eagle', 'xx1', '36', 'hsc', 'pike rct3 debonair'
+					</td>
+					<td>
+						optional, manufacturer / year required to work. gets components by model. note, uses regex. 'eagle' will return multiple results.
+					</td>
+				</tr>
+			</table>
+			<h4 id="forks">Forks - All</h4>
+			<pre>
+//returns all forks
+var query = { 
+	component: 'fork' //we want forks
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=fork</code>
+					</td>	
+					<td>
+						Returns all forks in array
+					</td>
+				</tr>
+			</table>
+
+			<h4>Forks - Detailed</h4>
+			<p>All paramaters that are possible to return a specific subset of forks.</p>
+			<pre>
+//returns specific forks
+var query = { 
+	component: 'fork', //we want forks
+	maxForkTravel: 170, //that are 170mm or less travel
+	minForkTravel: 150, //that are 150mm or greater travel
+	rearAxleSize: '12 x 148', //that will fit a 12 x 148 bike, returning boost forks
+	wheelSize: '27.5' //that fit 27.5" bikes
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=fork&maxForkTravel=180&minForkTravel=150&rearAxleSize=12 x 148&wheelSize=27.5</code>
+					</td>
+					<td>
+						Returns available forks in array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>minForkTravel</code>
+					</td>
+					<td>
+						integer
+					</td>
+					<td>
+						100
+					</td>
+					<td>
+						required with maxForkTravel
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>maxForkTravel</code>
+					</td>
+					<td>
+						integer
+					</td>
+					<td>
+						203
+					</td>
+					<td>
+						required with minForkTravel
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>wheelSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"27.5", "29"
+					</td>
+					<td>
+						26, one day
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>rearAxleSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"12 x 148"
+					</td>
+					<td>
+						currently only one option to get boost forks
+					</td>
+				</tr>
+			</table>
+			<h4 id="shocks">Shocks - All</h4>
+			<pre>
+var query = { 
+	component: 'shock' //we want shocks
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=shock</code>
+					</td>
+					<td>
+						Returns all shocks in an array
+					</td>
+				</tr>
+			</table>
+			<h4>Shocks - By Size</h4>
+			<pre>
+var query = { 
+	component: 'shock', //we want shocks
+	shockSize: '8.5 X 2.5' //that fit a Wreckoning
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=shock&shockSize=8.5 x 2.5</code>
+					</td>
+					<td>
+						Returns all shocks in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>shockSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						Imperial:<br />"5.5 x 1", "6 x 1.25", "7.25 x 1.75", "7.5 x 2", "7.875 x 2", "7.875 x 2.25", "8.25 x 2.375", "8.5 x 2.25", "8.5 x 2.5", "8.75 x 2.75", "9.5 x 3", "10.5 x 3.5"<br /><br />
+						Metric:<br />"210 x 52.5", "230 x 65", "230 x 57.5"
+					</td>
+					<td>
+						optional
+					</td>
+				</tr>
+			</table>
+			<h4 id="wheels">Wheels - All</h4>
+			<pre>
+var query = { 
+	component: 'wheel set', //we want wheels
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=wheel set</code>
+					</td>
+					<td>
+						Returns all wheel sets in an array
+					</td>
+				</tr>
+			</table>
+			<h4>Wheels - By Size / Axle</h4>
+			<p>There isn't an option for frontAxleSize. The wheelset returns what axle options are available for the fork. This will be revisited in the wheel builder.</p>
+			<pre>
+var query = { 
+	component: 'wheel set', //we want wheels
+	wheelSize: '27.5+', //plus size
+	rearAxleSize: '12 x 148' //boost baby
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=wheel set&wheelSize=27.5%2B&rearAxleSize=12 x 148</code>
+					</td>
+					<td>
+						Returns all wheel sets in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>rearAxleSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"5 x 135", "10 x 135", "12 x 135", "12 x 142", "12 x 148", "12 x 150", "12 x 157"
+					</td>
+					<td>
+						optional
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>wheelSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"27.5", "29", "27.5+" (27.5%2B, remember to encode certain special characters in the query string)
+					</td>
+					<td>
+						optional
+					</td>
+				</tr>
+			</table>
+			<h4 id="tires">Tires - All</h4>
+			<pre>
+var query = { 
+	component: 'tires', //we want tires
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=tires</code>
+					</td>
+					<td>
+						Returns all tires in an array
+					</td>
+				</tr>
+			</table>
+			<h4>Tires - By Size / Width</h4>
+			<pre>
+var query = { 
+	component: 'tires', //we want tires
+	usage: 'enduro', //enduro
+	wheelSize: '27.5', //650b
+	maxTireSize : 2.6 //less than 2.6" wide
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=tires&usage=enduro&wheelSize=27.5&maxTireSize=2.6</code>
+					</td>
+					<td>
+						Returns selected tires in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>usage</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"hardtail", "cross country", "trail", "enduro", "downhill"
+					</td>
+					<td>
+						optional, probably not the most reliable
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>wheelSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"27.5", "29", "27.5+" (27.5%2B, remember to encode special characters in the query string)
+					</td>
+					<td>
+						optional
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>maxTireSize</code>
+					</td>
+					<td>
+						int
+					</td>
+					<td>
+						2.1 - 3.0
+					</td>
+					<td>
+						optional
+					</td>
+				</tr>
+			</table>
+			<h4 id="drivetrain">Drivetrain - By Speeds</h4>
+			<p>How to access derailleurs, shifters, and cassettes.</p>
+			<pre>
+var query = { 
+	component: 'drivetrain', //we want drivetrain parts
+	speeds : ['1 x 11', '1 x 12'] //i like big cassettes and i can not lie
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=drivetrain&speeds=1 x 11&speeds=1 x 12</code>
+					</td>
+					<td>
+						Returns selected drivetrain components in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>speeds</code>
+					</td>
+					<td>
+						array or string
+					</td>
+					<td>
+						"1 x 7", "1 x 10", "1 x 11", "1 x 12"
+					</td>
+					<td>
+						required, at least one. 1 x 7 and 1 x 10 are currently dh drivetrains
+					</td>
+				</tr>
+			</table>
+			<h4 id="guides">Chain Guides</h4>
+			<pre>
+var query = { 
+	component: 'chain guide', //we want guides
+	iscg : 'iscg-05' //iscg-05, who uses anything else?
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=chain guide&iscg=iscg-05</code>
+					</td>
+					<td>
+						Returns all chain guides
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>iscg</code>
+					</td>
+					<td>
+						array or string
+					</td>
+					<td>
+						"iscg-05"
+					</td>
+					<td>
+						optional. all guides are currently iscg-05.
+					</td>
+				</tr>
+			</table>
+			<h4 id="rings">Chain Rings - All</h4>
+			<pre>
+var query = { 
+	component: 'chain ring', //we want rings
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=chain ring</code>
+					</td>
+					<td>
+						Returns all chain rings in an array
+					</td>
+				</tr>
+			</table>
+			<h4 id="cranks">Cranksets - All</h4>
+			<pre>
+var query = { 
+	component: 'crankset', //we want crank
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=crankset</code>
+					</td>
+					<td>
+						Returns all chain rings in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>usage</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"enduro", "trail", "cross country", "hardtail", "downhill"
+					</td>
+					<td>
+						optional. really just used to separate downhill from others
+					</td>
+				</tr>
+			</table>
+			<h4 id="bbs">Bottom Brackets - All</h4>
+			<pre>
+var query = { 
+	component: 'bottom bracket', //we want bbs
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=bottom bracket</code>
+					</td>
+					<td>
+						Returns all bottom brackets
+					</td>
+				</tr>
+			</table>
+			<h4>Bottom Brackets - By Size</h4>
+			<pre>
+var query = { 
+	component: 'bottom bracket', //we want bbs
+	bottomBracket : 'bsa-68' //that are english threaded 68/73
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=bottom bracket&bottomBracket=bsa-68</code>
+					</td>
+					<td>
+						Returns selected bottom brackets in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>bottomBracket</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"bsa-68", "bsa-83", "pf30", "pf30-83", "bb30", "bb90", "bb91", "bb92", "bb107"
+					</td>
+					<td>
+						optional. used when you pass frame size bb to get appropriate bbs.
+					</td>
+				</tr>
+			</table>
+			<h4 id="seatposts">Seatposts - All</h4>
+			<pre>
+var query = { 
+	component: 'seatpost', //we want posts
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=seatpost</code>
+					</td>
+					<td>
+						Returns all seat posts in an array
+					</td>
+				</tr>
+			</table>
+			<h4>Seatposts - By Diameter</h4>
+			<pre>
+var query = { 
+	component: 'seatpost', //we want posts
+	seatpost: 34.9 //that fit a wreckoning
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=seatpost&seatpost=34.9</code>
+					</td>
+					<td>
+						Returns appropriate seat posts in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>seatpost</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						28.2, 30.9, 31.6, 34.9
+					</td>
+					<td>
+						optional. used when you pass frame seat post size.
+					</td>
+				</tr>
+			</table>
+			<h4 id="saddles">Saddles - All</h4>
+			<pre>
+var query = { 
+	component: 'saddles', //we want saddles
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=saddles</code>
+					</td>
+					<td>
+						Returns all saddles in an array
+					</td>
+				</tr>
+			</table>
+			<h4 id="pedals">Pedals - All</h4>
+			<pre>
+var query = { 
+	component: 'pedals', //we want pedals
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=pedals</code>
+					</td>
+					<td>
+						Returns all pedals in an array
+					</td>
+				</tr>
+			</table>
+			<h4 id="handlebars">Handlebar - All</h4>
+			<pre>
+var query = { 
+	component: 'handlebar', //we want bars
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=handlebar</code>
+					</td>
+					<td>
+						Returns all bars in an array
+					</td>
+				</tr>
+			</table>
+			<h4 id="grips">Grips - All</h4>
+			<pre>
+var query = { 
+	component: 'grips', //we want grips
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=grips</code>
+					</td>
+					<td>
+						Returns all grips in an array
+					</td>
+				</tr>
+			</table>
+			<h4 id="stems">Stem - All</h4>
+			<pre>
+var query = { 
+	component: 'stem', //we want stems
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=stems</code>
+					</td>
+					<td>
+						Returns all stems in an array
+					</td>
+				</tr>
+			</table>
+			<h4>Stem - By Mount</h4>
+			<pre>
+var query = { 
+	component: 'stem', //we want stems
+	stemDirectMount: true
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=stems&stemDirectMount=true</code>
+					</td>
+					<td>
+						Returns appropriate stems in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>stemDirectMount</code>
+					</td>
+					<td>
+						bool
+					</td>
+					<td>
+						true
+					</td>
+					<td>
+						optional. used for dh stems.
+					</td>
+				</tr>
+			</table>
+			<h4 id="headsets">Headsets - All</h4>
+			<pre>
+var query = { 
+	component: 'headset', //we want cups
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=headset</code>
+					</td>
+					<td>
+						Returns all headsets in an array
+					</td>
+				</tr>
+			</table>
+			<h4>Headsets - By SHIS</h4>
+			<pre>
+//specific
+var query = { 
+	component: 'headset', //we want cups
+	shisUpperSize: 44, //44mm 
+	shisUpperType:'ZS, //Zero Stack Upper
+	shisLowerSize:49, //49mm
+	shisLowerType: 'EC' //External Cup Lower
+};
+
+//generic
+var query = { 
+	component: 'headset', //we want cups
+	shisUpperType:'ZS, //Zero Stack
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=headset</code>
+					</td>
+					<td>
+						Returns appropriate headsets in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>shisUpperSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"34", "44", "49", "56", "IS41", "IS42", "IS47", "IS52", "knockblock"
+					</td>
+					<td>
+						optional. used to match headsets to frames
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>shisUpperType</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"EC", "ZS", "IS", "knockblock"
+					</td>
+					<td>
+						optional. used to match headsets to frames
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>shisLowerSize</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"34", "44", "49", "56", "IS41", "IS42", "IS47", "IS52", "knockblock"
+					</td>
+					<td>
+						optional. used to match headsets to frames
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>shisLowerType</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"EC", "ZS", "IS", "knockblock"
+					</td>
+					<td>
+						optional. used to match headsets to frames
+					</td>
+				</tr>
+			</table>
+			<h4 id="brakes">Brakes - All</h4>
+			<pre>
+var query = { 
+	component: 'brake', //we want brakes
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=brake</code>
+					</td>
+					<td>
+						Returns all brakes in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>usage</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						"enduro", "trail", "cross country", "hardtail", "downhill"
+					</td>
+					<td>
+						optional. really just used to separate downhill from others
+					</td>
+				</tr>
+			</table>
+			<h4 id="rotors">Rotor - All</h4>
+			<pre>
+var query = { 
+	component: 'rotor', //we want rotors
+};
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/component?component=rotor</code>
+					</td>
+					<td>
+						Returns all rotors in an array
+					</td>
+				</tr>
+			</table>
+			<h3 id="bikes">Bikes</h3>
+			<h4 id="forks">Bikes - All</h4>
+			<pre>
+var query = { 
+	manufacturer : 'yt',
+	model : 'tues',
+	year : 2017
+};
+
+Bikologi.bikeAPI(query, apiKey)
+	.then(function(resp){ 
+		console.log(resp)
+	}).catch(function(err) {
+		console.log(err);
+	});
+			</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/bike</code>
+					</td>
+					<td>
+						Returns bikes in an array
+					</td>
+				</tr>
+			</table>
+			<table class="table table-bordered">
+				<tr>
+					<th>Key</th>
+					<th>Type</th>
+					<th>Value</th>
+					<th>Requirements</th>
+				</tr>
+				<tr>
+					<td>
+						<code>manufacturer</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						see brands api
+					</td>
+					<td>
+						optional. gets bikes of brand. note, uses regex.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>year</code>
+					</td>
+					<td>
+						integer
+					</td>
+					<td>
+						2015, 2016, 2017, 2018
+					</td>
+					<td>
+						optional. gets bikes from a year
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>model</code>
+					</td>
+					<td>
+						string
+					</td>
+					<td>
+						following, insurgent, wreckoning, slash, etc
+					</td>
+					<td>
+						optional. gets bike by mode. note, uses regex. 'patrol' will return multiple results.
+					</td>
+				</tr>
+			</table>
+			<h3 id="brands">Brands - All</h3>
+				
+				<pre>
+Bikologi.brandAPI(apiKey)
+	.then(function(resp){ 
+		console.log(resp)
+	}).catch(function(err) {
+		console.log(err);
+	});
+				</pre>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>GET</code>
+					</td>
+					<td>
+						<code>https://bikologi-api.herokuapp.com/manufacturer</code>
+					</td>
+					<td>
+						Returns brands in an array
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div id="compatibility" class="container">
+			<h2>Component Compatibility</h2>
+			<p class="lead">Initial compatibility will happen by properly calling the components according to parameters returned from calling the bike API. However, there are plenty of scenarios of compatibility checks that will have to happen after initial product requests.</p>
+		</div>
+		<div id="mtb-bikes" class="container">
+			<h2>MTB Image Generator</h2>
+			<p class="lead">The premise of utilizing the Product API comes to fruition with the image generator. Looking at each of the objects returned from the api, each uses the _id property. We utilize the _id as a unique id for each component and bike. We combine this with a server side image rendering approach. Let's take a look at this example url: </p>
+			<pre>
+&lt;img src="https://bikologi-stage-images.herokuapp.com/trail-bike.png?bikeID=59501e1cdcead9000f037301
+	&bikeColor=tan
+	&forkID=595032e5dcead9000f037339
+	&wheelsID=582eb29949123b00105a5d50
+	&wheelsColor=yellow
+	&frontTireID=5903eff06c1d51000fa150fd
+	&rearTireID=5903eff06c1d51000fa150fd" /&gt;
+			</pre>
+			<img style="width:100%; background:#f5f5f5; border-radius:4px; padding:20px; border:1px solid #ccc" src="https://bikologi-stage-images.herokuapp.com/trail-bike.png?bikeID=59501e1cdcead9000f037301&bikeColor=tan&forkID=595032e5dcead9000f037339&wheelsID=582eb29949123b00105a5d50&wheelsColor=yellow&frontTireID=5903eff06c1d51000fa150fd&rearTireID=5903eff06c1d51000fa150fd" />
+			<h3 id="mtb-parameters">DH / Trail Bike Parameters</h3>
+			<p>To render a trail, enduro, xc, or hardtail mountain bike, use the following(temporary) URL: <code>https://bikologi-stage-images.herokuapp.com/trail-bike.png?bikeID=...</code></p>
+			<p>To render a DH bike, use the following(temporary) URL: <code>https://bikologi-stage-images.herokuapp.com/dh-bike.png?bikeID=...</code>
+			<table class="table table-bordered">
+				<tr>
+					<td>
+						<code>bikeID*</code>
+					</td>
+					<td>
+						_id of bike. Required.
+					</td>
+					<td>
+						<code>bikeColor</code>
+					</td>
+					<td>
+						Defaults to first in array of colors on object.
+					</td>
+					<td>
+						<code>cockpitID</code>
+					</td>
+					<td>
+						Any value triggers cables on frame.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>forkID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>forkColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>shockID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>shockColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>wheelsID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>wheelsColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>frontTireID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>frontTireColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>rearTireID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>rearTireColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>rearDerailleurID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>rearDerailleurColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>cassetteID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>cassetteColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>chainID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>chainColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>chainRingID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>chainRingColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>spiderID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>spiderColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>cranksetID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>cranksetColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>shifterID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>shifterColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>bottomBracketID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>bottomBracketColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>chainGuideID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>chainGuideColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>headsetID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>headsetColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>seatPostID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>seatPostColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>saddleID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>saddleColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>handlebarID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>handlebarColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>gripID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>gripColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>stemID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>stemColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>brakeID</code>
+					</td>
+					<td colspan="2">
+						_id of component. Triggers brake mount image.
+					</td>
+					<td>
+						<code>brakeColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>rotorID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>rotorColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<code>pedalID</code>
+					</td>
+					<td colspan="2">
+						_id of component.
+					</td>
+					<td>
+						<code>pedalColor</code>
+					</td>
+					<td colspan="2">
+						Defaults to first in array of colors on object.
+					</td>
+				</tr>
+			</table>
+			<h3 id="mtb-testing">MTB Query String Generator</h3>
+			<p>With a valid API key, you can use this form to generate an image, or get a better understanding how to. Note that there is no compatibility logic. This is purely for an example. Compatibility logic will be provided as a seperate layer on production applications.</p>
+			<form>
+				<script>
+					$(function(){
+						function generateBikeOptions(data){
+							for(var i = 0; i < data.length; i++){
+								 var $option = $('<option/>'),
+								 	title = data[i].year + ' ' + data[i].manufacturer + ' ' + data[i].model;
+
+							 	$option.text(title)
+							 	$option.attr('data-uID', data[i]._id);
+						        $option.appendTo($('#test-bikes'));
+							}
+						}
+
+						function generateBikeColors(colors, decals){
+							$('#test-frame-color').find('option').remove().end().append('<option>Choose Frame Color</option>');
+							$('#test-frame-decal').find('option').remove().end().append('<option>Choose Frame Decal</option>');
+
+							for(var i = 0; i < colors.length; i++){
+								 var $option = $('<option/>'),
+								 	title = colors[i];
+
+							 	$option.text(title)
+							 	$option.attr('value', colors[i]._id);
+						        $option.appendTo($('#test-frame-color'));
+							}
+
+							for(var i = 0; i < decals.length; i++){
+								 var $option = $('<option/>'),
+								 	title = decals[i];
+
+							 	$option.text(title)
+							 	$option.attr('value', decals[i]._id);
+						        $option.appendTo($('#test-frame-decal'));
+							}
+						}
+
+						function generateComponentColors(arr, parent, param, dArr, dParent, dParam){
+							var $select = $('<select class="color-change form-control" data-param="' + param + '" />'),
+								$dSelect = $('<select class="decal-change form-control" data-param="' + dParam + '" />');
+
+							$(parent).empty();
+							$(dParent).empty();
+
+							if(arr.length > 1){	
+								for(var i = 0; i < arr.length; i++){
+									 var $option = $('<option/>'),
+									 	$label = $('<label>Available Colors</label>')
+									 	title = arr[i];
+
+								 	$option.text(title)
+							        $option.appendTo($select);
+							        $select.append($option);
+								}
+							} else {
+								var $label = $('<label>No Available Colors</label>');
+
+								 $select.attr('disabled', 'disabled');
+							}
+
+							if(dArr.length > 1){
+								for(var i = 0; i < dArr.length; i++){
+									 var $option = $('<option/>'),
+									 	$dLabel = $('<label>Available Decals</label>')
+									 	title = dArr[i];
+
+								 	$option.text(title)
+							        $option.appendTo($select);
+							        $dSelect.append($option);
+								}
+							} else {
+								var $dLabel = $('<label>No Available Decals</label>');
+
+								 $dSelect.attr('disabled', 'disabled');
+							}
+
+							$(parent).append($label);
+							$(parent).append($select);
+							$(dParent).append($dLabel);
+							$(dParent).append($dSelect);
+						}
+
+						function generateImg(){
+							var imgSrc = '',
+								$img = $('#active-img');
+
+							if(window.Bikologi.activeBike.category === 'Downhill'){
+								imgSrc = 'https://bikologi-stage-images.herokuapp.com/dh-bike.png?bikeID=' + window.Bikologi.activeBike._id;
+							} else {
+								imgSrc = 'https://bikologi-stage-images.herokuapp.com/trail-bike.png?bikeID=' + window.Bikologi.activeBike._id;
+							}
+
+							for(key in window.Bikologi.activeParams){
+								console.log(key, window.Bikologi.activeParams[key]);
+								imgSrc = imgSrc + '&' + key + '=' + window.Bikologi.activeParams[key];
+							}
+
+							$('.preloader').show();
+							$img.attr('src', imgSrc);
+						}
+
+						function sortComponents(data){
+							var structure = {};
+							$('#dynamic-selects').empty();
+							if(data){
+								for(var i = 0; i < data.length; i++){
+									var component = data[i];
+
+									component.colors = [''];
+									component.decals = [''];
+
+									for(var ii = 0; ii < component.images.builder.length; ii++){
+										var image = component.images.builder[ii];
+
+										if(image.color && image.color !== 'fork' && component.colors.indexOf(image.color) < 0){
+											component.colors.push(image.color);
+										} else if(image.decal){
+											component.decals.push(image.decal);
+										}
+									}
+
+									if(!structure[component.component]){
+										structure[component.component] = [];
+									}
+
+									if(component.component === 'fork' || component.component === 'stem' || component.component === 'shock'){
+										if(window.Bikologi.activeBike.category === 'Downhill' && component.usage.indexOf('downhill') >= 0){
+											structure[component.component].push(component);
+										} else if(window.Bikologi.activeBike.category !== 'Downhill' && component.usage.indexOf('downhill') < 0) {
+											structure[component.component].push(component);
+										}
+									} else {
+										structure[component.component].push(component);
+									}
+								}
+// think we need this too
+								structure['front wheel'] = JSON.parse(JSON.stringify(structure.wheels));
+								structure['rear wheel'] = JSON.parse(JSON.stringify(structure.wheels));
+
+								structure['front tire'] = JSON.parse(JSON.stringify(structure.tires));
+								structure['rear tire'] = JSON.parse(JSON.stringify(structure.tires));
+								structure['front rim'] = JSON.parse(JSON.stringify(structure.rim));
+								structure['rear rim'] = JSON.parse(JSON.stringify(structure.rim));
+								structure['front hub'] = JSON.parse(JSON.stringify(structure.hub));
+								structure['rear hub'] = JSON.parse(JSON.stringify(structure.hub));
+								structure['front nipple'] = JSON.parse(JSON.stringify(structure.nipple));
+								structure['rear nipple'] = JSON.parse(JSON.stringify(structure.nipple));
+								structure['front spoke'] = JSON.parse(JSON.stringify(structure.spoke));
+								structure['rear spoke'] = JSON.parse(JSON.stringify(structure.spoke));
+								structure['rear valve stem'] = JSON.parse(JSON.stringify(structure['valve stems']));
+								structure['front valve stem'] = JSON.parse(JSON.stringify(structure['valve stems']));
+								delete structure.tires;
+								delete structure.rim;
+								delete structure.spoke;
+								delete structure.nipple;
+								delete structure.hub;
+								delete structure['valve stems'];
+								window.Bikologi.components = structure;
+
+								for(key in structure){
+									var $row = $('<div class="row"></div>'),
+										$col1 = $('<div class="col-xs-8"></div>'),
+										$col2 = $('<div class="col-xs-2 color-parent"></div>'),
+										$col3 = $('<div class="col-xs-2 decal-parent"></div>'),
+										$label = $('<label>Choose Your ' + key + '</label>'),
+										$select = $('<select class="form-control param-change" data-param="' + key + '" />'),
+										$pre = $('<option>Select Component</option>');
+
+									$select.append($pre);
+
+									for(var i = 0; i < structure[key].length; i++){
+										var component = structure[key][i],
+											$component = $('<option data-uID="' + component._id + '">' + component.year + ' ' + component.manufacturer + ' ' + component.model + '</option>');
+
+										$select.append($component);
+									}
+									
+									$col1.append($label);
+									$col1.append($select);
+									$row.append($col1);
+									$row.append($col2);
+									$row.append($col3);
+									$('#dynamic-selects').append($row);
+								}
+							}
+						}
+
+						$('#go-api-key').on('click', function(){
+							var $field = $('#api-key-field'),
+								key = $field.val(),
+								query = {};
+
+							window.Bikologi.bikeAPI(query, key)
+								.then(function(resp){
+									if(resp.error){
+										$('#test-fail').show();
+										$('#test-bikes, #test-image').hide();
+
+									} else {
+										window.Bikologi.bikes = resp;
+										generateBikeOptions(resp);
+										$('#test-fail').hide();
+										$('#test-bikes, #test-image').show();
+									}
+
+								}).catch(function(err) {
+									$('#test-fail').show();
+									$('#test-bikes, #test-image').hide();
+								});
+						});
+
+						$('#test-bikes').on('change', function(){
+							var $img = $('#active-img'),
+								activeID = $($('#test-bikes option:contains("'+this.value+'")')[0]).attr('data-uID'),
+								bike = {},
+								imgSrc = '',
+								$field = $('#api-key-field'),
+								key = $field.val(),
+								query = {};
+
+							$('.preloader').show();
+
+							window.Bikologi.activeParams = {};
+
+							$img.attr('src', '/images/placeholder.jpg');
+
+							for(var i = 0; i < window.Bikologi.bikes.length; i++){
+								if(activeID === window.Bikologi.bikes[i]._id){
+									bike = window.Bikologi.bikes[i];
+									window.Bikologi.activeBike = bike;
+									break;
+								}
+							}
+
+							bike.colors = [];
+							bike.decals = [];
+
+							for(var i = 0; i < bike.images.builder.length; i++){
+								if(bike.images.builder[i].color && !bike.images.builder[i].position && bike.colors.indexOf(bike.images.builder[i].color < 0)){
+									bike.colors.push(bike.images.builder[i].color);
+								} else if(bike.images.builder[i].decal && bike.decals.indexOf(bike.images.builder[i].decal) < 0){
+									bike.decals.push(bike.images.builder[i].decal);
+								}
+							}
+
+							if(bike.category === 'Downhill'){
+								imgSrc = 'https://bikologi-stage-images.herokuapp.com/dh-bike.png?bikeID=' + bike._id;
+							} else {
+								imgSrc = 'https://bikologi-stage-images.herokuapp.com/trail-bike.png?bikeID=' + bike._id;
+							}
+							if(window.Bikologi.rawComponents){
+								sortComponents(window.Bikologi.rawComponents)
+							} else {
+								window.Bikologi.componentAPI(query, key)
+									.then(function(resp){
+										if(resp.error){
+											console.log(resp.error)
+										} else {
+											window.Bikologi.rawComponents = resp;
+											sortComponents(resp);
+										}
+
+									}).catch(function(err) {
+										console.log(err);
+									});
+							}
+
+							generateBikeColors(bike.colors, bike.decals)
+							$img.attr('src', imgSrc);
+							$('#test-params').show();
+						});
+
+						$('#active-img').on('load', function () {
+							if(window.Bikologi.activeBike){
+								$('#active-query-string').html($('#active-img').attr('src'));
+							}
+
+							$('.preloader').hide();
+						});
+
+						$('body').on('change', '.color-change', function(){
+							var param = $(this).attr('data-param'),
+								color = this.value;
+
+							$('.preloader').show();
+
+							if(!window.Bikologi.activeParams){
+								window.Bikologi.activeParams = {};
+							}
+
+							window.Bikologi.activeParams[param] = color;
+
+							generateImg();
+						});
+
+						$('body').on('change', '.decal-change', function(){
+							var param = $(this).attr('data-param'),
+								color = this.value;
+
+							$('.preloader').show();
+
+							if(!window.Bikologi.activeParams){
+								window.Bikologi.activeParams = {};
+							}
+
+							window.Bikologi.activeParams[param] = color;
+
+							generateImg();
+						});
+
+						$('body').on('change', '.param-change', function(){
+							var $img = $('#active-img'),
+								activeID = $($(this).find('option:contains("'+this.value+'")')[0]).attr('data-uID'),
+								param = $(this).attr('data-param'),
+								imgSrc = '',
+								colors = [],
+								decals = [],
+								colorParam = '',
+								bike = window.Bikologi.activeBike;
+
+							if(!window.Bikologi.activeParams){
+								window.Bikologi.activeParams = {};
+							}
+
+							if(param === 'fork'){
+								param = 'forkID'
+							} else if(param === 'shock'){
+								param = 'shockID';
+							} else if(param === 'wheel set'){
+								param = 'wheelsID';
+							} else if(param === 'front tire'){
+								param = 'frontTireID';
+							} else if(param === 'rear tire'){
+								param = 'rearTireID';
+							} else if(param === 'front hub'){
+								param = 'frontHubID';
+							} else if(param === 'rear hub'){
+								param = 'rearHubID';
+					// believe this is necessary
+							} else if (param === 'front wheel') {
+								param = 'frontWheelID';
+							} else if (param === 'rear wheel') {
+								param = 'rearWheelID';
+						//////////////////
+							} else if(param === 'front spoke'){
+								param = 'frontSpokeID';
+							} else if(param === 'rear spoke'){
+								param = 'rearSpokeID';
+							} else if(param === 'front valve stem'){
+								param = 'frontValveStemID';
+							} else if(param === 'rear valve stem'){
+								param = 'rearValveStemID';
+							} else if(param === 'front nipple'){
+								param = 'frontNippleID';
+							} else if(param === 'rear nipple'){
+								param = 'rearNippleID';
+							} else if(param === 'front rim'){
+								param = 'frontRimID';
+							} else if(param === 'rear rim'){
+								param = 'rearRimID';
+							} else if(param === 'derailleur'){
+								param = 'rearDerailleurID';
+							} else if(param === 'cassette'){
+								param = 'cassetteID';
+							} else if(param === 'chain'){
+								param = 'chainID';
+							} else if(param === 'chain ring'){
+								param = 'chainRingID';
+							} else if(param === 'spider'){
+								param = 'spiderID';
+							} else if(param === 'crankset'){
+								param = 'cranksetID';
+							} else if(param === 'shifter'){
+								param = 'shifterID';
+							} else if(param === 'bottom bracket'){
+								param = 'bottomBracketID';
+							} else if(param === 'chain guide'){
+								param = 'chainGuideID';
+							} else if(param === 'headset'){
+								param = 'headsetID';
+							} else if(param === 'seatpost'){
+								param = 'seatPostID';
+							} else if(param === 'saddle'){
+								param = 'saddleID';
+							} else if(param === 'handlebar'){
+								param = 'handlebarID';
+							} else if(param === 'grips'){
+								param = 'gripID';
+							} else if(param === 'stem'){
+								param = 'stemID';
+							} else if(param === 'brake'){
+								param = 'brakeID';
+							} else if(param === 'rotor'){
+								param = 'rotorID';
+							} else if(param === 'pedals'){
+								param = 'pedalID';
+							}
+
+							for(var i = 0; i < window.Bikologi.rawComponents.length; i++){
+								if(window.Bikologi.rawComponents[i]._id === activeID){
+									colors = window.Bikologi.rawComponents[i].colors;
+									decals = window.Bikologi.rawComponents[i].decals;
+									break;
+								}
+							}
+
+							console.log(activeID);
+							colorParam = param.replace('ID', 'Color');
+							decalParam = param.replace('ID', 'DecalColor');
+							generateComponentColors(colors, $(this).parent().parent().children('.color-parent'), colorParam, decals, $(this).parent().parent().children('.decal-parent'), decalParam);
+
+							window.Bikologi.activeParams[param] = activeID;
+
+							if(window.Bikologi.activeParams[colorParam]){
+								delete window.Bikologi.activeParams[colorParam];
+							}
+
+							generateImg();
+						});
+					});
+				</script>
+				<style>
+					#dynamic-selects label {
+						text-transform: capitalize;
+					}
+
+					#dynamic-selects select {
+						margin-bottom: 20px;
+					}
+				</style>
+				<h2 id="test-fail" style="display:none;" class="text-danger">Your API Key is Invalid</h2>
+				<div class="input-group">
+					<input type="text" id="api-key-field" name="api-key" class="form-control" placeholder="API Key" />
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="button" id="go-api-key">Go!</button>
+					</span>
+				</div>
+				<div class="test-area" style="padding-top:20px;">
+					<select id="test-bikes" class="form-control" style="display:none;">
+						<option>Choose Your Bike</option>
+					</select>
+				</div>
+				<div id="test-image" style="display:none; text-align: center; padding:20px 0;">
+					<img id="active-img" alt="" src="/images/placeholder.jpg" style="display: inline-block; max-height:500px; max-width: 100%; background:#f5f5f5; border-radius: 4px; padding:5px;">
+					<div style="margin:20px 0 0 0; text-align: left;">
+  						<label>Active Image Source</label>
+						<textarea id="active-query-string" class="form-control" type="text" placeholder="https://www..." style="background:#333; color:#f5f5f5; font-weight: 800; font-size:11px"></textarea>
+					</div>
+				</div>
+				<div id="test-params" style="display: none;">
+					<div class="row">
+						<div class="col-xs-6">
+							<label for="test-frame-color">Frame Color</label>
+							<select id="test-frame-color" class="form-control color-change" data-param="bikeColor" style="margin-bottom:20px;">
+								<option>Choose Frame Color</option>
+							</select>
+						</div>
+						<div class="col-xs-6">
+							<label for="test-frame-decal">Frame Decal</label>
+							<select id="test-frame-decal" class="form-control decal-change" data-param="bikeDecalColor" style="margin-bottom:20px;">
+								<option>Choose Frame Decal</option>
+							</select>
+						</div>
+					</div>
+					<div id="dynamic-selects">
+						<!-- magic happens here -->
+					</div>
+				</div>
+			</form>
+		</div>
+		<style>
+			.preloader {
+				display: none;
+				position: fixed;
+				width: 100%;
+				top:0;
+				left:0;
+				text-align: center;
+				height:100%;
+				z-index: 10;
+				background:rgba(0,0,0,0.8);
+			}
+
+			.preloader img {
+				display: inline-block;
+				width: 50px;
+				position: relative;
+				top:50vh;
+			}
+		</style>
+		<div class="preloader">
+			<img src="/images/logo.png" />
+		</div>
