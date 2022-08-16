@@ -66,6 +66,7 @@
     "query-string": "^4.3.4",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7",
+    "route-cache": "^0.4.7",
     "run-sequence": "^1.2.2",
     "webpack": "^2.6.1"
   },

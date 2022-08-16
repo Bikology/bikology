@@ -1,19 +1,13 @@
 const express = require('express')
 const kill = require('kill-port')
 const app = express()
-const { engine } = require('express-handlebars')
 
-app.engine('handlebars', engine());
-app.set('view engine', 'handlebars');
-app.set('views', './views');
+// Config API settings
+require('./app/lib/express')(app, express)
 
-app.use(express.static('build'))
-app.use(express.static('node_modules'))
-app.use(express.static('views'))
-
-
-app.get('/', function (req, res) {
-  res.render('index', { });
+// Create API server
+require('http').createServer(app).listen(process.env.PORT || app.get('port'), function(){
+  console.log("Express/Mongoose/Redis API running at localhost:" + (process.env.PORT || app.get('port')))
 })
 
 app.listen(process.env.PORT || 3002, function () {
