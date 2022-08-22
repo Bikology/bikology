@@ -1,7 +1,65 @@
 header.header {
-    a {
+    height:50px;
+    background:$opWhite;
+    border-bottom:1px solid $lightGrey;
+    position:fixed;
+    top: 0;
+    width:100%;
+
+    .home {
+        display: inline-block;
+        width: 135px;
+
         img {
-            width:150px;
+            padding:10px;
+            height:30px;
+        }
+    }
+
+    ul {
+        display: inline-block;
+        height:50px;
+        vertical-align: top;
+
+        li {
+            display: inline-block;
+            height:47px;
+            margin-top:3px;
+            margin-right:15px;
+        }
+
+        svg {
+            position: relative;
+            top:-2px;
+            width:25px;
+            height:25px;
+            display: inline-block;
+            vertical-align: middle;
+            fill: $pink;
+            transition: fill 0.25s ease-in-out;
+        }
+
+        a {
+            display: inline-block;
+            color: $pink;
+            text-decoration: none;
+            font-weight:400;
+            line-height: 50px;
+            transition: color 0.25s ease-in-out;
+
+            &:hover {
+                color: $purple;
+
+                svg {
+                    fill: $purple;
+                }
+            }
+        }
+
+        &.auth-nav {
+            position:absolute;
+            right:0;
+            top:0;
         }
     }
 }

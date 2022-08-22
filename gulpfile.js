@@ -17,7 +17,7 @@ const nodemon = require('gulp-nodemon');
 
 const paths = {
   html: { //saving html for later
-    src: './public/src/html/**/*.js',
+    src: ['./public/src/html/*.html', './public/src/html/**/*.html'],
     dest: './public/build/html'
   },
   styles: {
