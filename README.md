@@ -2,11 +2,11 @@
 
 ## Requirements
 
-**Node v14.12.0**
+**Node v16.14.0**
 
 If you have NVM installed, run:
 
-`nvm install 14.12.0
+`nvm install 16.14.0
 
 Otherwise download it from https://nodejs.org/en/.
 
