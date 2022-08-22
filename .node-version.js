@@ -2,7 +2,7 @@
   'use strict';
   var message  = '';
   var exitCode = 0;
-  var supportedNodeVersion = 'v14.12.0';
+  var supportedNodeVersion = 'v16.14.0';
 
   if (process.version === supportedNodeVersion) {
     message = 'You are using the supported node version for this project. Continuing...';

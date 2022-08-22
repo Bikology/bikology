@@ -1,68 +1,158 @@
-const del         = require('del');
-const gulp        = require('gulp');
-const gUtil       = require('gulp-util');
-const path        = require('path');
-const webpack     = require('webpack');
-const nodemon    = require('nodemon');
-const runSequence = require('gulp4-run-sequence');
-const log         = gUtil.log;
-const colors      = gUtil.colors;
-const paths       = {
-  src: {
-    root: 'src',
-    js: ['src/**/*.js', '!src/**/*.spec.js']
+// gulpfile originally pulled from https://github.com/LucasWinkler/gulp-boilerplate
+const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const babel = require('gulp-babel');
+const sourcemaps = require('gulp-sourcemaps');
+const concat = require('gulp-concat');
+const terser = require('gulp-terser');
+const rename = require('gulp-rename');
+const del = require('del');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnano = require('cssnano');
+const replace = require('gulp-replace');
+const imagemin = require('gulp-imagemin');
+const plumber = require('gulp-plumber');
+const nodemon = require('gulp-nodemon');
+
+const paths = {
+  html: { //saving html for later
+    src: './public/src/html/**/*.js',
+    dest: './public/build/html'
   },
-  build: {
-    root: 'build'
+  styles: {
+    src: ['./public/src/scss/*.scss', './public/src/scss/**/*.scss'],
+    dest: './public/build/css'
   },
-  test: {
-    root: 'test',
-    js: 'test/assets/js'
+  scripts: {
+    src: './public/src/js/**/*.js',
+    dest: './public/build/js'
+  },
+  vendors: {
+    src: './public/src/js/vendors/**/*.js',
+    dest: './public/build/js'
+  },
+  images: {
+    src: './public/src/img/**/*',
+    dest: './public/build/img'
+  },
+  favicon: {
+    src: './public/src/favicon/favicon.ico',
+    dest: './public/build/img'
   }
 };
 
-gulp.task('clean', () => del([paths.build.root]));
+const clean = () => del(['./public/build']);
 
-gulp.task('build', gulp.series('clean', (cb) => {
-  runSequence('webpack', cb);
-}));
+// Cache busting to prevent browser caching issues
+const curTime = new Date().getTime();
+const cacheBust = () =>
+  gulp
+    .src(paths.html.src)
+    .pipe(plumber())
+    .pipe(replace(/cb=\d+/g, 'cb=' + curTime))
+    .pipe(gulp.dest(paths.html.dest));
 
-gulp.task('watch', gulp.series('build', () => {
-  // initialize watch functionality with BrowserSync here
-  // to re-build assets on file changes, then reload browser
-  if (process.env.NODE_ENV !== 'production') {
-    nodemon({
-      script: 'app.js', ext: 'js html', env: { 'NODE_ENV': 'development' }
-    });
-  }
 
-  gulp.watch(paths.src.js, () => {
-    runSequence('webpack');
+// Copies all html files
+const html =() =>
+  gulp
+    .src(paths.html.src)
+    .pipe(plumber())
+    .pipe(gulp.dest(paths.html.dest));
+
+// Convert scss to css, auto-prefix and rename into styles.min.css
+const styles = () =>
+  gulp
+    .src(paths.styles.src)
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(sass().on('error', sass.logError))
+    .pipe(postcss([autoprefixer(), cssnano()]))
+    .pipe(
+      rename({
+        basename: 'styles',
+        suffix: '.min'
+      })
+    ) 
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(paths.styles.dest));
+
+// Minify all javascript files and concat them into a single app.min.js
+const scripts = () =>
+  gulp
+    .src(paths.scripts.src)
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(
+      babel({
+        presets: ['@babel/preset-env']
+      })
+    )
+    .pipe(terser())
+    .pipe(concat('app.min.js'))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(paths.scripts.dest));
+
+// Minify all javascript vendors/libs and concat them into a single vendors.min.js
+const vendors = () =>
+  gulp
+    .src(paths.vendors.src)
+    .pipe(plumber())
+    .pipe(sourcemaps.init())
+    .pipe(
+      babel({
+        presets: ['@babel/preset-env']
+      })
+    )
+    .pipe(terser())
+    .pipe(concat('vendors.min.js'))
+    .pipe(sourcemaps.write('.'))
+    .pipe(gulp.dest(paths.vendors.dest));
+
+// Copy and minify images
+const images = () =>
+  gulp
+    .src(paths.images.src)
+    .pipe(plumber())
+    .pipe(imagemin())
+    .pipe(gulp.dest(paths.images.dest));
+
+// Copy the favicon
+const favicon = () =>
+  gulp
+    .src(paths.favicon.src)
+    .pipe(plumber())
+    .pipe(gulp.dest(paths.favicon.dest));
+
+// Watches all .scss, .js and .html changes and executes the corresponding task
+function watchFiles(done) {
+  nodemon({
+    script: 'app.js', ext: 'js html' , env: { 'NODE_ENV': 'development' }, done: done
   });
-}));
 
-gulp.task('webpack', (callback) => {
-  const webpackConfig = Object.assign({}, require('./webpack.config.js'));
+  gulp.watch(paths.styles.src, styles);
+  gulp.watch(paths.vendors.src, vendors);
+  gulp.watch(paths.favicon.src, favicon);
+  gulp.watch(paths.scripts.src, scripts);
+  gulp.watch(paths.images.src, images);
+  gulp.watch('./app/*.html', html);
+}
 
-  if (process.env.NODE_ENV === 'test') {
-    webpackConfig.output.path = path.resolve('./', paths.test.js);
-  }
+const build = gulp.series(
+  clean,
+  gulp.parallel(styles, vendors, scripts, images, favicon),
+  cacheBust
+);
 
-  if (process.env.NODE_ENV !== 'production') {
-    webpackConfig.devtool = 'eval-source-map';
-  }
+const watch = gulp.series(build, watchFiles);
 
-  const compiler = webpack(webpackConfig);
-
-  compiler.run((err, stats) => {
-    if (err) {
-      throw new gUtil.PluginError('webpack', err);
-    }
-
-    log('[webpack]', stats.toString({
-      colors: true
-    }));
-
-    callback();
-  });
-});
+exports.clean = clean;
+exports.styles = styles;
+exports.scripts = scripts;
+exports.vendors = vendors;
+exports.images = images;
+exports.favicon = favicon;
+exports.watch = watch;
+exports.build = build;
+exports.default = build;

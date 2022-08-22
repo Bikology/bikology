@@ -7,7 +7,7 @@ require('./app/lib/express')(app, express)
 
 // Create API server
 require('http').createServer(app).listen(process.env.PORT || app.get('port'), function(){
-  console.log("Express/Mongoose/Redis API running at localhost:" + (process.env.PORT || app.get('port')))
+  console.log("Express APP running at localhost:3002")
 })
 
 app.listen(process.env.PORT || 3002, function () {
